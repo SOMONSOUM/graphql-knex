@@ -1,0 +1,35 @@
+name: ci
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.4
+        env: { MYSQL_ROOT_PASSWORD: secret, MYSQL_DATABASE: my_api_test }
+        ports: ["3306:3306"]
+        options: >-
+          --health-cmd="mysqladmin ping -h localhost -psecret" --health-interval=5s --health-retries=20
+      redis:
+        image: redis:7-alpine
+        ports: ["6379:6379"]
+    env:
+      NODE_ENV: test
+      DATABASE_URL: mysql://root:secret@127.0.0.1:3306/my_api_test
+      JWT_ACCESS_SECRET: test_access_secret_test_access_secret_1234
+      JWT_REFRESH_SECRET: test_refresh_secret_test_refresh_secret_12
+      REDIS_HOST: 127.0.0.1
+      KAFKA_BROKERS: localhost:9092
+      SWC_NATIVE_BINDING_CACHE: ${{ github.workspace }}/.cache/swc-native
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: npm }
+      - run: npm ci
+      - run: npm run lint
+      - run: npm test
+      - run: npm run build
+      - run: npm run migration:latest:prod
+      - run: npm run typecheck
+      - run: npm run test:e2e
+      - run: npm audit --omit=dev --audit-level=high

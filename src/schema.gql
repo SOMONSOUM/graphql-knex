@@ -1,0 +1,83 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type AuthPayload {
+  accessToken: String!
+  refreshToken: String!
+}
+
+input CreateUserInput {
+  email: String!
+  fullName: String
+  password: String!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+input LoginInput {
+  email: String!
+  password: String!
+}
+
+type Mutation {
+  deleteUser(id: ID!): Boolean!
+  login(input: LoginInput!): AuthPayload!
+  logout(input: RefreshTokenInput!): Boolean!
+  logoutAll: Boolean!
+  refreshToken(input: RefreshTokenInput!): AuthPayload!
+  register(input: CreateUserInput!): User!
+  updateMe(input: UpdateUserInput!): User!
+}
+
+type PaginatedUsers {
+  data: [User!]!
+  meta: PaginationMeta!
+}
+
+type PaginationMeta {
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  limit: Int!
+  page: Int!
+  total: Int!
+  totalPages: Int!
+}
+
+type Permission {
+  action: String!
+  resource: String!
+}
+
+type Query {
+  me: User!
+  user(id: ID!): User!
+  users(isActive: Boolean, limit: Int! = 20, page: Int! = 1, search: String, sortBy: String! = "createdAt", sortOrder: SortOrder! = DESC): PaginatedUsers!
+}
+
+input RefreshTokenInput {
+  refreshToken: String!
+}
+
+enum SortOrder {
+  ASC
+  DESC
+}
+
+input UpdateUserInput {
+  fullName: String
+}
+
+type User {
+  createdAt: DateTime!
+  email: String!
+  fullName: String
+  id: ID!
+  isActive: Boolean!
+  permissions: [Permission!]!
+  roles: [String!]!
+  updatedAt: DateTime!
+}

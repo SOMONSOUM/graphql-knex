@@ -1,0 +1,12 @@
+import { Global, Module } from '@nestjs/common';
+import { KafkaProducerService } from '@/kafka/kafka-producer.service';
+import { NoopKafkaProducerService } from '@/kafka/noop-kafka-producer.service';
+
+@Global()
+@Module({
+  providers: [
+    { provide: KafkaProducerService, useClass: NoopKafkaProducerService },
+  ],
+  exports: [KafkaProducerService],
+})
+export class NoopKafkaModule {}
