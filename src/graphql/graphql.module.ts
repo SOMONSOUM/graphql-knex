@@ -3,7 +3,7 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { ConfigService } from '@nestjs/config';
 import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
 import depthLimit from 'graphql-depth-limit';
-import { join } from 'path';
+import { join } from 'node:path';
 import type { Request, Response } from 'express';
 import { formatError } from '@/graphql/format-error';
 

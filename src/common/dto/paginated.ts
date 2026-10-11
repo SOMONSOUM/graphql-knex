@@ -6,8 +6,11 @@ import type { PaginatedResult } from '@/common/interfaces/paginated-result.inter
 export function Paginated<T>(ItemClass: Type<T>) {
   @ObjectType({ isAbstract: true })
   abstract class PaginatedType {
-    @Field(() => [ItemClass]) data: T[];
-    @Field(() => PaginationMetaModel) meta: PaginationMetaModel;
+    @Field(() => [ItemClass])
+    data: T[];
+
+    @Field(() => PaginationMetaModel)
+    meta: PaginationMetaModel;
   }
   return PaginatedType as Type<PaginatedResult<T>>;
 }
